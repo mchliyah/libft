@@ -3,22 +3,22 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mchliyah <mchliyah@student.1337.ma>        +#+  +:+       +#+         #
+#    By: mchliyah <mchliyah@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/09 12:33:10 by mchliyah          #+#    #+#              #
-#    Updated: 2021/11/22 19:13:50 by mchliyah         ###   ########.fr        #
+#    Updated: 2022/06/14 21:14:45 by mchliyah         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-CC = @gcc
+CC = gcc
 
-CFLAG =  -Wall -Werror -Wextra -c
+CFLAGS =  -Wall -Werror -Wextra -c
 
-RM = @rm -f
+RM = rm -f
 
-AR = @ar rc
+AR = ar rc
 
 FILES= 					\
 	./ft_atoi.c			\
@@ -66,31 +66,37 @@ FBONUS = 				\
 	./ft_lstnew_bonus.c			\
 	./ft_lstsize_bonus.c		
 
-OBJECTS = $(subst .c,.o,$(FILES))
-BONUOBJ = $(subst .c,.o,$(FBONUS))
+OBJECTS = $(FILES:.c=.o)
+
+%.o: %.c
+	@$(CC) $(CFLAGS) $^ -o $@
+
+C_RED = \033[1;31m
+C_GREEN = \033[1;32m
+C_L_BLUE = \033[1;34m
+C_RES = \033[0m
 
 all : $(NAME)
 
 $(NAME) :  $(OBJECTS)
-	$(CC) $(CFLAG) $(FILES)
-	$(AR) $(NAME) $(OBJECTS)
-	@echo "[LIBFT CREATED!]"
+	@$(AR) $(NAME) $(OBJECTS)
+	@echo "$(C_GREEN) [LIBFT CREATED!]$(C_RES)"
 
-clean : 
-	$(RM) $(OBJECTS) $(BONUOBJ)
-	@echo "[OBJECTS DELETED!]"
-
-fclean : clean
-	$(RM) $(NAME)
-	@echo "[LIBFT.A DELTED!]"
 
 bonus : $(BONUOBJ)
 
 $(BONUOBJ) : $(FBONUS)
-	$(CC) $(CFLAG) $(FBONUS)
-	$(AR) $(NAME) $(BONUOBJ)
-	@echo "[BONUS CREATED!]"
+	@$(AR) $(NAME) $(BONUOBJ)
+	@echo "$(C_L_BLUE) [BONUS CREATED!]$(C_RES)"
 	
+clean : 
+	@$(RM) $(OBJECTS) $(BONUOBJ)
+	@echo "$(C_RED) [OBJECTS DELETED!]$(C_RES)"
+
+fclean : clean
+	@$(RM) $(NAME)
+	@echo "$(C_RED) [LIBFT.A DELTED!]$(C_RES)"
+
 re : fclean all
 
 rebonus : fclean bonus
